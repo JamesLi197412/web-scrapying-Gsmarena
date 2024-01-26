@@ -22,6 +22,7 @@ class Crawler:
         parent = soup.find("div", class_ = class_name)
         info = parent.ul.find_all('li')
 
+        # Generate empty dict to store brands and its next page
         brands_dict = dict()
 
         for element in info:
