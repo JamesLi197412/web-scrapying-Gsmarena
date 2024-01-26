@@ -18,7 +18,7 @@ def web_browser(url):
 
 def web_test(url):
     # Example usage
-    tokens_per_second = 2  # Adjust as needed
+    tokens_per_second = 1  # Adjust as needed
     bucket = TokenBucket(tokens_per_second)
 
     while True:
@@ -26,7 +26,10 @@ def web_test(url):
             # Perform your web scraping operations here
             print("Scraping...")
             req = requests.get(url)
-            soup = BeautifulSoup(req.text, 'html.parser')
+            if req.status_code == 200:
+                soup = BeautifulSoup(req.text, 'html.parser')
+                print(soup)
+            elif req.
 
         # Add some delay between subsequent requests
         time.sleep(1)
