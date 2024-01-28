@@ -23,6 +23,7 @@ class Crawler:
 
         except HTTPError as e:
             print(e)
+            return None
         except URLError as e:
             print('The server could not be found')
             return None
@@ -37,14 +38,14 @@ class Crawler:
         :return: return a dict (brand: brands' website)
         """
         soup = self.getPage(mainurl)
-        info = soup.find('div', {'class': 'bradmenu_v2 light 1-box clearfix'}).ul.find_all('li')
+        info = soup.find('div', class_ = 'brandmenu-v2 light l-box clearfix')
+        info = info.find('ul').find_all('li')
 
         # Generate empty dict to store brands and its next page
         brands_dict = dict()
         for element in info:
-            # access to link and brand_name
             brand_name = element.text
-            brands_dict[brand_name] = mainurl + element.a.get('href')
+            brands_dict[brand_name] = mainurl + element.a.get('href') # vendor URL
 
         return brands_dict
 
