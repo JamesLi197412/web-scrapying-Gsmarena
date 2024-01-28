@@ -48,7 +48,7 @@ class Crawler:
         # print(brands_dict)
         return brands_dict
 
-    def brandProducts(self,brand, brandUrl):
+    def brandProductsPageIntel(self, brandUrl):
         """
         Sweep through brand web (brand URL) includes its pages and record
         all product name, and their product url as well
@@ -61,20 +61,23 @@ class Crawler:
 
         # current Page right now
         pagesList = brandsSoup.find_all("div", {'class':"nav-pages"})
-        currPageNumber = pagesList.select('strong')[0].text
+        for tags in pagesList:
+            if tags.select('strong'):
+                currPageNumber = tags.select('strong')[0].text
         # print(currPageNumber)
 
         # Find out # of pages with this brand
         pagesList = brandsSoup.find("div", {"class":"nav-pages"})
 
+        links = []
         page_link = dict()
         for tags in pagesList.find_all('a'):
-            page_link['Page Number' + tags.text] = tags.get('href')
+            link = tags.get('href')
+            page_link['Page Number' + tags.text] = link
+            links.append(link)
+        maxPageNumber = tags.text
 
-        #
-        maxPageNumber = list(page_link)[-1]
-
-        return currPageNumber, maxPageNumber
+        return currPageNumber, maxPageNumber,links
 
 
     def pageProduct(self,brandSoup):
