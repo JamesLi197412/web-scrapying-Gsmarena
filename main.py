@@ -8,6 +8,8 @@ import itertools
 from crawler import Crawler
 from tokenBucket import TokenBucket
 
+# Learning material: https://beautiful-soup-4.readthedocs.io/en/latest/#encodings
+
 def web_browser(url):
     crawler = Crawler()
     print('Start Crawing the website now')
