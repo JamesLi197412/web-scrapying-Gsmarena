@@ -1,6 +1,5 @@
 import time
 
-
 class TokenBucket:
     def __init__(self, tokens_per_second):
         self.tokens_per_second = tokens_per_second

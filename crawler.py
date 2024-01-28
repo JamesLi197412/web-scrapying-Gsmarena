@@ -1,6 +1,5 @@
 import requests
 import pandas as pd
-import numpy as np
 
 from urllib.error import HTTPError
 from urllib.error import URLError
@@ -8,7 +7,6 @@ from urllib.request import urlopen
 
 from bs4 import BeautifulSoup
 
-from content import Content
 
 class Crawler:
     def getPage(self, url):
@@ -47,9 +45,10 @@ class Crawler:
             brand_name = element.text
             brands_dict[brand_name] = mainurl + element.a.get('href') # vendor URL
 
+        # print(brands_dict)
         return brands_dict
 
-    def brandProducts(self,brandUrl):
+    def brandProducts(self,brand, brandUrl):
         """
         Sweep through brand web (brand URL) includes its pages and record
         all product name, and their product url as well
@@ -60,37 +59,48 @@ class Crawler:
         #
         brandsSoup = self.getPage(brandUrl)
 
+        # current Page right now
+        pagesList = brandsSoup.find_all("div", {'class':"nav-pages"})
+        currPageNumber = pagesList.select('strong')[0].text
+        # print(currPageNumber)
+
         # Find out # of pages with this brand
-        pagesList = brandsSoup.find_all("div", {"class":"nav-pages"})
+        pagesList = brandsSoup.find("div", {"class":"nav-pages"})
+
         page_link = dict()
-        for tags in pagesList:
-            if (tags.select('strong')):
-                currPageNumber = tags.select('strong')[0].text
-                print(currPageNumber)
-            elif tags.select('a'):
-                print(tags.select('a').text)
+        for tags in pagesList.find_all('a'):
+            page_link['Page Number' + tags.text] = tags.get('href')
+
+        #
+        maxPageNumber = list(page_link)[-1]
+
+        return currPageNumber, maxPageNumber
 
 
+    def pageProduct(self,brandSoup):
         # Find out all contents/products on current page
         # to get href & product_name
         # output will be another dict
         productLists = dict()
-        for child in brandsSoup.find('div', {'class':'makers'}).ul.find_all('li'):
+        for child in brandSoup.find('div', {'class':'makers'}).ul.find_all('li'):
             product = child.text
             productLists[product] = child.a.get('href')
 
+        return productLists
 
 
-    def productSpecs(self, productUrl):
+    def productSpecs(self, productUrl,brand,product):
         """
         Extract information from product page and convert it into DF
         :param productUrl:URL of the product
+                brand: Vendor Name
+                product: product name
         :return: Dataframe contains product all specification
         """
         soupProduct = self.getPage(productUrl)
         productPage = soupProduct.find('div', {'class':'main main-review right l-box col'})
 
-        cols = []
+        cols = [brand,product]
         # Extract col Names from the site
         for title in productPage.find_all('td',{'class':'ttl'}):
             cols.append(title.text)

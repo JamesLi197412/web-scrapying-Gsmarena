@@ -10,8 +10,18 @@ from tokenBucket import TokenBucket
 
 def web_browser(url):
     crawler = Crawler()
+    print('Start Crawing the website now')
     brands = crawler.brandNamePage(url)
-    print(brands)
+
+    for index, (brand,brandURL) in enumerate(brands.items()):
+        print('Crawing Information Brand by Brand now')
+        # Visit brand page one by one
+        brandProductIntel   =  crawler.brandProducts(brand, brandURL)
+        print(brandProductIntel)
+
+
+   # print(type(brands))
+
 
 
 # Press the green button in the gutter to run the script.
