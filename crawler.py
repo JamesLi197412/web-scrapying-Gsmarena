@@ -14,7 +14,6 @@ class Crawler:
     def getPage(self, url):
         try:
             req = requests.get(url)
-
             if req.status_code == 200:
                 soup = BeautifulSoup(req.text, 'html.parser')
             elif req.status_code == 429:
@@ -50,6 +49,13 @@ class Crawler:
         return brands_dict
 
     def brandProducts(self,brandUrl):
+        """
+        Sweep through brand web (brand URL) includes its pages and record
+        all product name, and their product url as well
+
+        :param brandUrl: Brand URL, such as https://www.gsmarena.com/xiaomi-phones-80.php
+        :return: df: cols = brand, product name within its brand, and its href & product url
+        """
         #
         brandsSoup = self.getPage(brandUrl)
 

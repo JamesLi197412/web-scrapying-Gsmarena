@@ -10,8 +10,6 @@ from tokenBucket import TokenBucket
 
 def web_browser(url):
     crawler = Crawler()
-    crawler.getPage(url)
-
     brands = crawler.brandNamePage(url)
     print(brands)
 
