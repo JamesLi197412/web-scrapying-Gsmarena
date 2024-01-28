@@ -1,6 +1,13 @@
 import requests
 import pandas as pd
+import numpy as np
+
+from urllib.error import HTTPError
+from urllib.error import URLError
+from urllib.request import urlopen
+
 from bs4 import BeautifulSoup
+
 from content import Content
 
 class Crawler:
@@ -10,41 +17,62 @@ class Crawler:
 
             if req.status_code == 200:
                 soup = BeautifulSoup(req.text, 'html.parser')
+            elif req.status_code == 429:
+                print('Unfortunately, Pages have been visited too much. You are suggested to visit the website later')
             else:
                 print(req.status_code)
 
-        except requests.exceptions.RequestException:
+        except HTTPError as e:
+            print(e)
+        except URLError as e:
+            print('The server could not be found')
             return None
 
         return soup
 
-    def brandNamePage(self, class_name, url):
-        soup = self.getPage(url)
-        parent = soup.find("div", class_ = class_name)
-        info = parent.ul.find_all('li')
+    def brandNamePage(self, mainurl):
+        """
+
+        :param class_name: 'bradmenu_v2 light 1-box clearfix'
+        :param url:Home page of https://www.gsmarena.com/
+        :return: return a dict (brand: brands' website)
+        """
+        soup = self.getPage(mainurl)
+        info = soup.find('div', {'class': 'bradmenu_v2 light 1-box clearfix'}).ul.find_all('li')
 
         # Generate empty dict to store brands and its next page
         brands_dict = dict()
-
         for element in info:
             # access to link and brand_name
-            link = element.a.get('href')
             brand_name = element.text
-
-            brands_dict[brand_name] = url + link
-
-
+            brands_dict[brand_name] = mainurl + element.a.get('href')
 
         return brands_dict
 
-    def brandProducts(self,class_name,url):
-        brand_dict = self.brandNamePage(url,class_name)
-        for index, value in brand_dict:
-            #
-            soup_brand = self.getPage(value)
+    def brandProducts(self,brandUrl):
+        #
+        brandsSoup = self.getPage(brandUrl)
+
+        # Find out # of pages with this brand
+        pagesList = brandsSoup.find_all("div", {"class":"nav-pages"})
+        page_link = dict()
+        for tags in pagesList:
+            if (tags.select('strong')):
+                currPageNumber = tags.select('strong')[0].text
+                print(currPageNumber)
+            elif tags.select('a'):
+                print(tags.select('a').text)
 
 
-            print(value)
+        # Find out all contents/products on current page
+        # to get href & product_name
+        # output will be another dict
+        productLists = dict()
+        for child in brandsSoup.find('div', {'class':'makers'}).ul.find_all('li'):
+            product = child.text
+            productLists[product] = child.a.get('href')
+
+
 
     def productSpecs(self, productUrl):
         """
@@ -72,19 +100,3 @@ class Crawler:
         return prodDf
 
 
-    def safeGet(self, pageObj, selector):
-        selectedElems = pageObj.select(selector)
-        if selectedElems is not None and len(selectedElems) > 0:
-            return '\n'.join([elem.get_text() for elem in selectedElems])
-
-        return ''
-
-    def parse(self, site, url):
-        bs = self.getPage(url)
-        if bs is not None:
-            title = self.safeGet(bs, site.titleTag)
-            body = self.safeGet(bs, site.bodyTag)
-
-            if title != '' and body != '':
-                content = Content(url, title, body)
-                content.print()
