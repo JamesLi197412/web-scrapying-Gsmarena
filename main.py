@@ -15,18 +15,19 @@ def web_browser(url):
     print('Start Crawing the website now')
     brands = crawler.brandNamePage(url)
 
-    #for index, (brand,brandURL) in enumerate(brands.items()):
-    #    print('Crawing Information Brand by Brand now')
-    #    # Visit brand page one by one
-    #    brandProductIntel   =  crawler.brandProducts(brand, brandURL)
-    #    print(brandProductIntel)
+    for index, (brand,brandURL) in enumerate(brands.items()):
+        print('Crawing Information Brand by Brand now')
+        print('Currently working on Brand :' + brand + 'now')
 
-    currPageNumber, maxPageNumber,links = crawler.brandProductsPageIntel('https://www.gsmarena.com/xiaomi-phones-f-80-0-p2.php')
-    print(currPageNumber)
-    print('-'* 50)
-    print(maxPageNumber)
-    print(links)
-   # print(type(brands))
+        #
+        currPageNum, maxPageNum, links = crawler.brandProductsPageIntel(brandURL)
+
+        # Current Page work
+        brandSoup = crawler.getPage(brandURL)
+        brandLists, brandCurrProd = crawler.pageProduct(brandSoup)
+
+        print(brandCurrProd.head(10))
+
 
 
 
