@@ -80,16 +80,28 @@ class Crawler:
         return currPageNumber, maxPageNumber,links
 
 
-    def pageProduct(self,brandSoup):
-        # Find out all contents/products on current page
-        # to get href & product_name
-        # output will be another dict
+    def pageProduct(self,brandSoup,brandName):
+        """
+        Sweep through brand web (brand URL) and record
+        all product name, and their product url as well
+        :param brandSoup:  soup of the current brand page, e.g. https://www.gsmarena.com/xiaomi-phones-80.php
+        :return:
+            dataframe or dict contains brand; product name; its url links
+        """
+        cols = ['Vendor', 'Product Name', 'Product Name Links']
         productLists = dict()
+
+        # DF to store information
+        productDf = pd.DataFrame(columns= cols)
+
         for child in brandSoup.find('div', {'class':'makers'}).ul.find_all('li'):
             product = child.text
             productLists[product] = child.a.get('href')
 
-        return productLists
+            df = pd.DataFrame([brandName, product, child.a.get('href')], columns = cols)
+            productDf = pd.concat([productDf,df], ignore_index= True)
+
+        return productLists,productDf
 
 
     def productSpecs(self, productUrl,brand,product):
