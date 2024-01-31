@@ -10,21 +10,24 @@ from tokenBucket import TokenBucket
 
 # Learning material: https://beautiful-soup-4.readthedocs.io/en/latest/#encodings
 
-def web_browser(url):
+def web_browser(url,customHeaders):
     crawler = Crawler()
     print('Start Crawing the website now')
-    brands = crawler.brandNamePage(url)
+    brands = crawler.brandNamePage(url,customHeaders)
 
     for index, (brand,brandURL) in enumerate(brands.items()):
         print('Crawing Information Brand by Brand now')
-        print('Currently working on Brand :' + brand + 'now')
+        print('Currently working on Brand :' + brand + ' now')
 
         #
-        currPageNum, maxPageNum, links = crawler.brandProductsPageIntel(brandURL)
+        currPageNum, maxPageNum, links = crawler.brandProductsPageIntel(brandURL,customHeaders)
+
+        print(currPageNum)
+        print(maxPageNum)
 
         # Current Page work
-        brandSoup = crawler.getPage(brandURL)
-        brandLists, brandCurrProd = crawler.pageProduct(brandSoup)
+        brandSoup = crawler.getPage(brandURL,customHeaders)
+        brandLists, brandCurrProd = crawler.pageProduct(brandSoup,customHeaders)
 
         print(brandCurrProd.head(10))
 
@@ -41,6 +44,6 @@ if __name__ == '__main__':
         "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Safari/605.1.15",
     }
 
-    web_browser(url)
+    web_browser(url,customHeaders)
 
 

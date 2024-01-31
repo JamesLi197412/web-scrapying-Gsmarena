@@ -12,6 +12,11 @@ class Crawler:
 
 
     def getPage(self, url,customHeaders):
+        proxy = '127.0.0.1:9180'
+        proxies ={
+            'http':"http://" + proxy,
+            'https': "https://" + proxy,
+        }
         try:
             req = requests.get(url, headers = customHeaders)
             if req.status_code == 200:
@@ -45,7 +50,7 @@ class Crawler:
         brands_dict = dict()
         for element in info:
             brand_name = element.text
-            brands_dict[brand_name] = mainurl + element.a.get('href') # vendor URL
+            brands_dict[brand_name] = mainurl + '/'+element.a.get('href') # vendor URL
 
         # print(brands_dict)
         return brands_dict
