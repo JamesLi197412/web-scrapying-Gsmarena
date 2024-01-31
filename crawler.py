@@ -9,9 +9,11 @@ from bs4 import BeautifulSoup
 
 
 class Crawler:
-    def getPage(self, url):
+
+
+    def getPage(self, url,customHeaders):
         try:
-            req = requests.get(url)
+            req = requests.get(url, headers = customHeaders)
             if req.status_code == 200:
                 soup = BeautifulSoup(req.text, 'html.parser')
             elif req.status_code == 429:
@@ -28,14 +30,14 @@ class Crawler:
 
         return soup
 
-    def brandNamePage(self, mainurl):
+    def brandNamePage(self, mainurl,customHeaders):
         """
 
         :param class_name: 'bradmenu_v2 light 1-box clearfix'
         :param url:Home page of https://www.gsmarena.com/
         :return: return a dict (brand: brands' website)
         """
-        soup = self.getPage(mainurl)
+        soup = self.getPage(mainurl,customHeaders)
         info = soup.find('div', class_ = 'brandmenu-v2 light l-box clearfix')
         info = info.find('ul').find_all('li')
 
@@ -48,7 +50,7 @@ class Crawler:
         # print(brands_dict)
         return brands_dict
 
-    def brandProductsPageIntel(self, brandUrl):
+    def brandProductsPageIntel(self, brandUrl,customHeaders):
         """
         Sweep through brand web (brand URL) includes its pages and record
         all product name, and their product url as well
@@ -57,7 +59,7 @@ class Crawler:
         :return: df: cols = brand, product name within its brand, and its href & product url
         """
         #
-        brandsSoup = self.getPage(brandUrl)
+        brandsSoup = self.getPage(brandUrl,customHeaders)
 
         # current Page right now
         pagesList = brandsSoup.find_all("div", {'class':"nav-pages"})
@@ -104,7 +106,7 @@ class Crawler:
         return productLists,productDf
 
 
-    def productSpecs(self, productUrl,brand,product):
+    def productSpecs(self, productUrl,brand,product,customHeaders):
         """
         Extract information from product page and convert it into DF
         :param productUrl:URL of the product
@@ -112,7 +114,7 @@ class Crawler:
                 product: product name
         :return: Dataframe contains product all specification
         """
-        soupProduct = self.getPage(productUrl)
+        soupProduct = self.getPage(productUrl,customHeaders)
         productPage = soupProduct.find('div', {'class':'main main-review right l-box col'})
 
         cols = [brand,product]

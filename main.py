@@ -36,6 +36,11 @@ if __name__ == '__main__':
     # main Page
     url = 'https://www.gsmarena.com'
 
+    customHeaders ={
+        "accept-language": "en-GB, en;q=0.9",
+        "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Safari/605.1.15",
+    }
+
     web_browser(url)
 
 
