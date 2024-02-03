@@ -14,28 +14,22 @@ def web_browser(url,customHeaders):
     crawler = Crawler()
     brands = crawler.brandNamePage(url,customHeaders)
 
-    for index, (brand,brandURL) in enumerate(brands.items()):
-        print('Crawing Information Brand by Brand now')
-        print('Currently working on Brand :' + brand + ' now')
+    prodsDict = dict()
+    # print('Crawing Information Brand by Brand now')
 
+    for index, (brand,brandURL) in enumerate(brands.items()):
+        print('Currently working on Brand :' + brand + ' now')
         currPageNum, maxPageNum, links, brandSoup = crawler.brandProductsPageIntel(brandURL,customHeaders)
 
-        brandLists, brandCurrProd = crawler.pageProduct(brandSoup, brand)
+        brandDicts, _ = crawler.pageProduct(brandSoup, brand)
+        prodSpecifications = []
+        for prod in brandDicts:
+            prodURL = url + '/' +brandDicts[prod]
+            productDicts = crawler.productSpecs(prodURL, brand, prod, customHeaders)
+            prodSpecifications.append(productDicts)
 
-
-
-
-        print(brandLists)
-
-        '''
-        for product in brandCurrProd['Product Name']:
-            prodURL = brandCurrProd[brandCurrProd['Product Name'] == product]['Product Name Links']
-            prodURL = url + '/' +prodURL
-
-            product_df = crawler.productSpecs(prodURL, brand, product, customHeaders)
-            print(product_df.head(5))
-        ''''
-
+        prodsDict[brand] = prodSpecifications
+    return prodsDict
 
 
 # Press the green button in the gutter to run the script.
@@ -50,6 +44,6 @@ if __name__ == '__main__':
         "user-agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Safari/605.1.15",
     }
 
-    web_browser(url,customHeaders)
+    prodsDict = web_browser(url,customHeaders)
 
 

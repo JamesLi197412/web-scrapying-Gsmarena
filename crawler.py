@@ -1,6 +1,6 @@
 import requests
 import pandas as pd
-
+import numpy as np
 from urllib.error import HTTPError
 from urllib.error import URLError
 
@@ -119,15 +119,22 @@ class Crawler:
         for title in productPage.find_all('td',{'class':'ttl'}):
             cols.append(title.text)
 
-        prodDf = pd.DataFrame(columns = cols)
+        prodDf = pd.DataFrame(columns = cols)  # generate empty dataframe
 
         # Feed intel into the dataframe
-        intel = []
+        intel = [brand,product]  # specifications
         for specs in productPage.find_all('td', {'class':'nfo'}):
             intel.append(specs.text)
+        cols[0] = 'Vendor'
+        cols[1] = 'Product Name'
+        #productArray = np.array([cols,intel])
 
-        prodDf = prodDf.append(pd.DataFrame([intel], columns=cols), ignore_index= True)
+        productDict = dict(zip(cols, intel))
 
-        return prodDf
+        #tempDf = pd.DataFrame([intel],columns = cols)
+        #prodDf = pd.concat([prodDf, tempDf], ignore_index=True)
+
+
+        return productDict
 
 
