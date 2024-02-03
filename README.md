@@ -53,9 +53,9 @@ Say what the step will be
 
 To run the code, main.py is ready to run
 
-## Crawler Object Structure 
+## Crawler Object Structure
 
-![](code structure.png)
+<img alt="Crawler Object Structure" height="400" src="code structure.png" width="350"/>
 
 ## Versioning
 
