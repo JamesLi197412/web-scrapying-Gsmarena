@@ -59,7 +59,7 @@ To run the code, main.py is ready to run
 
 ## Versioning
 
-I use Github/Git for versioning. 
+Github/Git are used for versioning/sharing. 
 
 ## Authors
 
