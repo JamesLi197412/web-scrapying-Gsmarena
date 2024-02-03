@@ -39,15 +39,17 @@ if __name__ == '__main__':
 
     scral = Crawler()
     brandlist = scral.brandNamePage(url,customHeaders)
+    brands = []
     for index, (brand, brandURL) in enumerate(brandlist.items()):
+        brands.append(brand)
         print(index, brand)
 
-    # brand = input('Which phone brand you would love to view, here is a list of option\n 1 for apple, 2 for samsung etc')
-    brandOption = 'apple'
-    prodsDict = web_browser(url,customHeaders,brandOption)
+    brand = input('Which phone brand you would love to view, here is a list of option\n index for vendor')
+
+    prodsDict = web_browser(url,customHeaders,brands[brand])
 
     # export outcome to txt file
-    with open('output.txt', 'w') as convert_file:
+    with open('output/output.txt', 'w') as convert_file:
         convert_file.write(json.dumps(prodsDict))
 
     print('Output file has been created yet. Job is done.')
