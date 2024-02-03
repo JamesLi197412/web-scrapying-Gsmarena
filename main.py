@@ -1,15 +1,6 @@
-import requests
-from bs4 import BeautifulSoup
-import numpy as np
-import pandas as pd
-import urllib3
-import time
-import itertools
+
 from crawler import Crawler
 import json
-from tokenBucket import TokenBucket
-
-# Learning material: https://beautiful-soup-4.readthedocs.io/en/latest/#encodings
 
 def web_browser(url,customHeaders,brandOption):
     crawler = Crawler()
@@ -51,11 +42,12 @@ if __name__ == '__main__':
     for index, (brand, brandURL) in enumerate(brandlist.items()):
         print(index, brand)
 
-    brand = input('Which phone brand you would love to view, here is a list of option\n 1 for apple, 2 for samsung etc')
-    prodsDict = web_browser(url,customHeaders,brand)
+    # brand = input('Which phone brand you would love to view, here is a list of option\n 1 for apple, 2 for samsung etc')
+    brandOption = 'apple'
+    prodsDict = web_browser(url,customHeaders,brandOption)
 
     # export outcome to txt file
-    with open('convert.txt', 'w') as convert_file:
+    with open('output.txt', 'w') as convert_file:
         convert_file.write(json.dumps(prodsDict))
 
     print('Output file has been created yet. Job is done.')
