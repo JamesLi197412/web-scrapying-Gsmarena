@@ -3,14 +3,11 @@ import pandas as pd
 
 from urllib.error import HTTPError
 from urllib.error import URLError
-from urllib.request import urlopen
 
 from bs4 import BeautifulSoup
 
 
 class Crawler:
-
-
     def getPage(self, url,customHeaders):
         proxy = '127.0.0.1:9180'
         proxies ={
@@ -46,54 +43,49 @@ class Crawler:
         info = soup.find('div', class_ = 'brandmenu-v2 light l-box clearfix')
         info = info.find('ul').find_all('li')
 
-        # Generate empty dict to store brands and its next page
         brands_dict = dict()
         for element in info:
             brand_name = element.text
             brands_dict[brand_name] = mainurl + '/'+element.a.get('href') # vendor URL
 
-        # print(brands_dict)
         return brands_dict
 
     def brandProductsPageIntel(self, brandUrl,customHeaders):
         """
-        Sweep through brand web (brand URL) includes its pages and record
-        all product name, and their product url as well
+            Sweep through brand web (brand URL) includes its pages and record
+            all product name, and their product url as well
 
         :param brandUrl: Brand URL, such as https://www.gsmarena.com/xiaomi-phones-80.php
         :return: df: cols = brand, product name within its brand, and its href & product url
         """
-        #
         brandsSoup = self.getPage(brandUrl,customHeaders)
 
         # current Page right now
-        pagesList = brandsSoup.find_all("div", {'class':"nav-pages"})
+        pagesList = brandsSoup.find_all("div", {'class':"section-body"})
         for tags in pagesList:
             if tags.select('strong'):
                 currPageNumber = tags.select('strong')[0].text
-        # print(currPageNumber)
 
         # Find out # of pages with this brand
-        pagesList = brandsSoup.find("div", {"class":"nav-pages"})
-
+        pagesList = brandsSoup.find("div", {"class":"section-body"})
         links = []
-        page_link = dict()
+        #page_link = dict()
         for tags in pagesList.find_all('a'):
             link = tags.get('href')
-            page_link['Page Number' + tags.text] = link
+            #page_link['Page Number' + tags.text] = link
             links.append(link)
         maxPageNumber = tags.text
 
-        return currPageNumber, maxPageNumber,links
+        return currPageNumber, maxPageNumber,links,brandsSoup
 
 
     def pageProduct(self,brandSoup,brandName):
         """
-        Sweep through brand web (brand URL) and record
-        all product name, and their product url as well
-        :param brandSoup:  soup of the current brand page, e.g. https://www.gsmarena.com/xiaomi-phones-80.php
-        :return:
-            dataframe or dict contains brand; product name; its url links
+            Sweep through brand web (brand URL) and record
+            all product name, and their product url as well
+            :param brandSoup:  soup of the current brand page, e.g. https://www.gsmarena.com/xiaomi-phones-80.php
+            :return:
+                dataframe or dict contains brand; product name; its url links
         """
         cols = ['Vendor', 'Product Name', 'Product Name Links']
         productLists = dict()
@@ -105,7 +97,7 @@ class Crawler:
             product = child.text
             productLists[product] = child.a.get('href')
 
-            df = pd.DataFrame([brandName, product, child.a.get('href')], columns = cols)
+            df = pd.DataFrame([[brandName, product, child.a.get('href')]], columns = cols)
             productDf = pd.concat([productDf,df], ignore_index= True)
 
         return productLists,productDf

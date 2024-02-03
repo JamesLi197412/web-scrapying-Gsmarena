@@ -12,25 +12,29 @@ from tokenBucket import TokenBucket
 
 def web_browser(url,customHeaders):
     crawler = Crawler()
-    print('Start Crawing the website now')
     brands = crawler.brandNamePage(url,customHeaders)
 
     for index, (brand,brandURL) in enumerate(brands.items()):
         print('Crawing Information Brand by Brand now')
         print('Currently working on Brand :' + brand + ' now')
 
-        #
-        currPageNum, maxPageNum, links = crawler.brandProductsPageIntel(brandURL,customHeaders)
+        currPageNum, maxPageNum, links, brandSoup = crawler.brandProductsPageIntel(brandURL,customHeaders)
 
-        print(currPageNum)
-        print(maxPageNum)
+        brandLists, brandCurrProd = crawler.pageProduct(brandSoup, brand)
 
-        # Current Page work
-        brandSoup = crawler.getPage(brandURL,customHeaders)
-        brandLists, brandCurrProd = crawler.pageProduct(brandSoup,customHeaders)
 
-        print(brandCurrProd.head(10))
 
+
+        print(brandLists)
+
+        '''
+        for product in brandCurrProd['Product Name']:
+            prodURL = brandCurrProd[brandCurrProd['Product Name'] == product]['Product Name Links']
+            prodURL = url + '/' +prodURL
+
+            product_df = crawler.productSpecs(prodURL, brand, product, customHeaders)
+            print(product_df.head(5))
+        ''''
 
 
 
@@ -38,6 +42,8 @@ def web_browser(url,customHeaders):
 if __name__ == '__main__':
     # main Page
     url = 'https://www.gsmarena.com'
+
+    print('Start Crawing the website now')
 
     customHeaders ={
         "accept-language": "en-GB, en;q=0.9",
