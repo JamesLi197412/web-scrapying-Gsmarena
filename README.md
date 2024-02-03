@@ -3,6 +3,25 @@ In this project, BeautifulSoup Library is utilised to extract phone, tablet, or 
 
 Bascially, this project let me learn how the BeautifulSoup access and read information from the HTML. Learning by doing. In addition, from working on scraping, 'Visiting too much' problem is solved by  adding Headers.
 
+The idea behind it: 
+* 1. Visit main page 
+* 2. Find Vendor List  
+* 3. For each vendor 
+* 4. Find its product list 
+* 5. For each product, collect all its specification
+
+**Table of Contents**
+
+- [Getting Started]
+    - [Prerequisites]
+    - [Installing]
+        - [Libraries]
+- [Authors]
+- [License]
+
+
+
+
 
 ## Getting Started
 Requires:
@@ -14,8 +33,11 @@ Requires:
 * urllib
 
 ### Prerequisites
-#####  Tools Required:
+
+```
+    Tools Required:
     Visual Studio or Pycharm (Any IDE could run Python)
+```
 
 ### Installing
 
@@ -31,15 +53,9 @@ Say what the step will be
 
 To run the code, main.py is ready to run
 
-## Coding style 
+## Coding Object Structure 
 
-Code Structure: 
-![](code structure.png=100x)
-
-
-```
-Give an example
-```
+![](code structure.png)
 
 ## Versioning
 
@@ -53,8 +69,4 @@ I use Github/Git for versioning.
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
-## Acknowledgments
 
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
