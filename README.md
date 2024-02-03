@@ -53,7 +53,7 @@ Say what the step will be
 
 To run the code, main.py is ready to run
 
-## Coding Object Structure 
+## Object Structure 
 
 ![](code structure.png)
 
