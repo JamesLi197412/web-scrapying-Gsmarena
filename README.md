@@ -1,7 +1,7 @@
 # Gsmarena Scrapy 
 In this project, BeautifulSoup Library is utilised to extract phone, tablet, or other electronic device from gsmarena website by vendor. It could allow user to get noticed what the latest electronic device is. The information that is extracted includes vendor, product, its specification and its release date. In the end, output.txt will be the output file for user for further purpose.
 
-Bascially, this project let me learn how the BeautifulSoup access and read information from the HTML. Learning by doing. In addition, from working on scraping, 'Visiting too much' problem is solved by  adding Headers.
+Bascially, this project let me learn how the BeautifulSoup access and read information from the HTML. Learning by doing. In addition, when working on scraping, 'Visiting too much' problem is solved by  adding Headers.
 
 The idea behind it: 
 * 1. Visit main page 
@@ -18,10 +18,6 @@ The idea behind it:
         - [Libraries]
 - [Authors]
 - [License]
-
-
-
-
 
 ## Getting Started
 Requires:
@@ -50,8 +46,15 @@ Say what the step will be
     pip install pandas
     pip install requests
 ```
+1. Clone the repository
+```
+ git clone https://github.com/JamesLi197412/web-scrapying.git
+```
 
-To run the code, main.py is ready to run
+Run the code
+```
+    python3 main.py 
+```
 
 ## Crawler Object Structure
 
