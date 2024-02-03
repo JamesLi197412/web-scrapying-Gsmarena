@@ -1,6 +1,6 @@
 import requests
 import pandas as pd
-import numpy as np
+
 from urllib.error import HTTPError
 from urllib.error import URLError
 
